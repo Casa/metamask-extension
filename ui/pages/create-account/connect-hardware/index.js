@@ -42,10 +42,13 @@ const LEDGER_ERRORS_CODES = {
 const LEDGER_LIVE_PATH = `m/44'/60'/0'/0/0`;
 const MEW_PATH = `m/44'/60'/0'`;
 const BIP44_PATH = `m/44'/60'/0'/0`;
+const CASA_PATH = `m/45/60/0`;
+
 export const LEDGER_HD_PATHS = [
   { name: 'Ledger Live', value: LEDGER_LIVE_PATH },
   { name: 'Legacy (MEW / MyCrypto)', value: MEW_PATH },
   { name: `BIP44 Standard (e.g. MetaMask, Trezor)`, value: BIP44_PATH },
+  { name: `Casa`, value: CASA_PATH },
 ];
 
 const LATTICE_STANDARD_BIP44_PATH = `m/44'/60'/0'/0/x`;
@@ -68,6 +71,7 @@ export const TREZOR_HD_PATHS = [
   { name: `BIP44 Standard (e.g. MetaMask, Trezor)`, value: BIP44_PATH },
   { name: `Legacy (Ledger / MEW / MyCrypto)`, value: MEW_PATH },
   { name: `Trezor Testnets`, value: TREZOR_TESTNET_PATH },
+  { name: `Casa`, value: CASA_PATH },
 ];
 
 const HD_PATHS = {

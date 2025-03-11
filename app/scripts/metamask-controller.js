@@ -4664,6 +4664,7 @@ export default class MetamaskController extends EventEmitter {
     return this.#withKeyringForDevice(
       { name: deviceName, hdPath },
       async (keyring) => {
+        console.log('connectHardware', deviceName, page, hdPath);
         if (deviceName === HardwareDeviceNames.ledger) {
           await this.setLedgerTransportPreference(keyring);
         }
@@ -7511,6 +7512,7 @@ export default class MetamaskController extends EventEmitter {
   async #withKeyringForDevice(options, callback) {
     const keyringOverrides = this.opts.overrides?.keyrings;
     let keyringType = null;
+    console.log('#withKeyringForDevice.options', { options });
     switch (options.name) {
       case HardwareDeviceNames.trezor:
       case HardwareDeviceNames.oneKey:
@@ -7531,9 +7533,13 @@ export default class MetamaskController extends EventEmitter {
         );
     }
 
+    console.log('#withKeyringForDevice.keyringType', { keyringType });
+    console.log('about to call withKeyring');
+
     return this.keyringController.withKeyring(
       { type: keyringType },
       async ({ keyring }) => {
+        console.log('inside withKeyring', { keyring });
         if (options.hdPath && keyring.setHdPath) {
           keyring.setHdPath(options.hdPath);
         }
