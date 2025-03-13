@@ -1,0 +1,6 @@
+coverage/
+build/
+globalConfig.json
+
+*.sublime-project
+*.sublime-workspace

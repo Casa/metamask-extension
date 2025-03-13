@@ -1,0 +1,18 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "node-template",
+    "version": "1.0.0",
+    "description": "An Example Lambda microservice"
+  },
+  "servers": [
+    {
+      "url": "https://acbskkh2nj.execute-api.us-east-1.amazonaws.com:8082/dev/{your-service}/api",
+      "description": "Development service in private gateway through a local jumphost tunnel"
+    },
+    {
+      "url": "https://connect-dev.keys.casa/{your-service}/api",
+      "description": "Development service through public gateway"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+on:
+  push:
+    branches: [master, staging, develop]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Get Node version
+        id: node_version
+        run: echo "::set-output name=value::$(cat package.json | jq '.engines.node' | tr -d '"')"
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.node_version.outputs.value }}
+          cache: 'yarn'
+
+      - name: Set application environment
+        uses: iamtheyammer/branch-env-vars@v1.0.3
+        with:
+          APP_ENV: |
+            master:prod
+            staging:stg
+            develop:dev
+
+      - name: Set AWS Credentials environment
+        uses: iamtheyammer/branch-env-vars@v1.0.3
+        with:
+          # TODO: Set the secrets below in your microservice repo settings.
+          #       You should be able to get the values for stg & dev from 1Password.
+          AWS_ACCESS_KEY_ID: |
+            master:${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+            staging:${{ secrets.AWS_ACCESS_KEY_ID_STG }}
+            develop:${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+          # TODO: Set the secrets below in your microservice repo settings.
+          #       You should be able to get the values for stg & dev from 1Password.
+          AWS_SECRET_ACCESS_KEY: |
+            master:${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+            staging:${{ secrets.AWS_SECRET_ACCESS_KEY_STG }}
+            develop:${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Build
+        run: yarn build
+
+      - name: Deploy
+        run: yarn deploy

@@ -1,0 +1,79 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "node-template",
+    "version": "1.0.0",
+    "description": "An Example Lambda microservice"
+  },
+  "servers": [
+    {
+      "url": "https://acbskkh2nj.execute-api.us-east-1.amazonaws.com:8082/dev/{your-service}/api",
+      "description": "Development service in private gateway through a local jumphost tunnel"
+    },
+    {
+      "url": "https://connect-dev.keys.casa/{your-service}/api",
+      "description": "Development service through public gateway"
+    }
+  ],
+  "paths": {
+    "/application/status": {
+      "get": {
+        "description": "Gets the status of the application along with the version and environment.",
+        "responses": {
+          "200": {
+            "description": "A Json object indicating the commit hash and other health related variables",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/application/runMigrations": {
+      "post": {
+        "description": "an admin endpoint to manually run database migrations",
+        "responses": {
+          "200": {
+            "description": "the result of the migrations"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Status": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Should be healthy",
+            "example": "OK"
+          },
+          "version": {
+            "type": "string"
+          },
+          "nodeEnv": {
+            "type": "string",
+            "description": "test | development | production",
+            "example": "test"
+          },
+          "build": {
+            "type": "string",
+            "description": "commit hash"
+          },
+          "buildTimestamp": {
+            "type": "string",
+            "format": "date",
+            "description": "build time"
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}

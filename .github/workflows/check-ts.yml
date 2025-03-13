@@ -1,0 +1,29 @@
+on:
+  push:
+    branches: [master, staging, develop]
+
+  pull_request:
+    branches: '*'
+
+jobs:
+  check-ts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo code
+        uses: actions/checkout@v2
+
+      - name: Get Node version
+        id: node_version
+        run: echo "::set-output name=node_version::$(cat package.json | jq '.engines.node' | tr -d '"')"
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.node_version.outputs.node_version }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Check all TypeScript types
+        run: yarn build:check

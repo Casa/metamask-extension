@@ -1,0 +1,61 @@
+on:
+  push:
+    branches: [master, staging, develop]
+
+  pull_request:
+    branches: '*'
+
+env:
+  DB_PORT: 5432
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo code
+        uses: actions/checkout@v2
+
+      - name: Get Node version
+        id: node_version
+        run: echo "::set-output name=node_version::$(cat package.json | jq '.engines.node' | tr -d '"')"
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.node_version.outputs.node_version }}
+          cache: 'yarn'
+
+      - name: Set application environment
+        uses: iamtheyammer/branch-env-vars@v1.2.0
+        with:
+          GATEWAY_PRIVATE_ID: |
+            master:private-gateway-master-id
+            staging:private-gateway-staging-id
+            develop:private-gateway-develop-id
+            !default:private-gateway-id
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Get microservice name
+        id: microservice_name
+        run: echo "::set-output name=package_name::$(cat package.json | jq '.name' | tr -d '"' | tr '-' '_')"
+
+      - name: Set up the database
+        uses: harmon758/postgresql-action@v1
+        with:
+          postgresql version: '14'
+          postgresql db: ${{ steps.microservice_name.outputs.package_name }}
+          postgresql user: dev_${{ steps.microservice_name.outputs.package_name }}
+          postgresql password: development
+
+      - name: Run all tests
+        run: yarn test:coverage
+
+      - name: Upload code coverage
+        uses: codecov/codecov-action@v2
+        with:
+          # TODO: Set the Codecov token in your microservice repo settings
+          #       to begin seeing coverage reports.
+          #       You should be able to get this from the Codecov dashboard.
+          token: ${{ secrets.CODECOV_TOKEN }}
