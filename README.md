@@ -1,3 +1,6 @@
+> **Note:** This is the Casa fork of the MetaMask extension, used for Sovereign Recovery. For more information, please visit [Casa's Sovereign Recovery documentation](https://support.casa.io/knowledge/march-2025-update-to-eth-vault-sovereign-recovery).
+
+
 # MetaMask Browser Extension
 
 You can find the latest version of MetaMask on [our official website](https://metamask.io/). For help using MetaMask, visit our [User Support Site](https://support.metamask.io/).

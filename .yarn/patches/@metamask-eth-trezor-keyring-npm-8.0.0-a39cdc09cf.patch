@@ -1,0 +1,30 @@
+diff --git a/dist/trezor-keyring.cjs b/dist/trezor-keyring.cjs
+index c8eb4a45ebf19b4c365e49b5de03b04f0b1b48aa..a9f2c4d857afb7ffc811747cb5c660577356c8fc 100644
+--- a/dist/trezor-keyring.cjs
++++ b/dist/trezor-keyring.cjs
+@@ -19,10 +19,12 @@ const hdkey_1 = __importDefault(require("hdkey"));
+ const hdPathString = `m/44'/60'/0'/0`;
+ const SLIP0044TestnetPath = `m/44'/1'/0'/0`;
+ const legacyMewPath = `m/44'/60'/0'`;
++const bip45Path = `m/45/60/0`;
+ const ALLOWED_HD_PATHS = {
+     [hdPathString]: true,
+     [legacyMewPath]: true,
+     [SLIP0044TestnetPath]: true,
++    [bip45Path]: true,
+ };
+ const keyringType = 'Trezor Hardware';
+ const pathBase = 'm';
+@@ -321,9 +323,9 @@ class TrezorKeyring {
+      * @param hdPath - The HD path to set.
+      */
+     setHdPath(hdPath) {
+-        if (!ALLOWED_HD_PATHS[hdPath]) {
+-            throw new Error(`The setHdPath method does not support setting HD Path to ${hdPath}`);
+-        }
++        // if (!ALLOWED_HD_PATHS[hdPath]) {
++            // throw new Error(`The setHdPath method does not support setting HD Path to ${hdPath}`);
++        // }
+         // Reset HDKey if the path changes
+         if (this.hdPath !== hdPath) {
+             this.hdk = new hdkey_1.default();
