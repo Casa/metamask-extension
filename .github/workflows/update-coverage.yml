@@ -1,9 +1,6 @@
 name: Update coverage
 
 on:
-  schedule:
-    # Once per day at midnight UTC
-    - cron: 0 0 * * *
   workflow_dispatch:
 
 jobs:

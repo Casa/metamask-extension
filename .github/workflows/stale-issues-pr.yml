@@ -2,8 +2,7 @@ name: 'Close stale issues and PRs'
 
 # run every 2 hours
 on:
-  schedule:
-    - cron: '0 */2 * * *'
+  workflow_dispatch:
 
 jobs:
   stale:

@@ -5,8 +5,6 @@ version: 2
 updates:
   - package-ecosystem: 'npm'
     directory: '/'
-    schedule:
-      interval: 'daily'
     allow:
       - dependency-name: '@metamask/*'
     versioning-strategy: 'lockfile-only'
